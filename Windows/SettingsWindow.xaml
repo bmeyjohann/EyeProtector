@@ -1,0 +1,142 @@
+<Window x:Class="EyeBreakEnforcer.Windows.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="EyeBreakEnforcer Settings"
+        Height="600"
+        Width="500"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="False">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+                
+                <!-- Blink Reminder Settings -->
+                <GroupBox Header="Blink Reminder" Margin="0,0,0,15">
+                    <StackPanel Margin="10">
+                        <CheckBox x:Name="BlinkEnabledCheckBox" Content="Enable blink reminders" Margin="0,0,0,10"/>
+                        
+                        <Label Content="Interval (seconds):" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Slider x:Name="BlinkIntervalSlider" Grid.Column="0" Minimum="10" Maximum="600" Value="300" TickFrequency="10" IsSnapToTickEnabled="True"/>
+                            <TextBlock x:Name="BlinkIntervalText" Grid.Column="1" Text="300 sec" Width="60" TextAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        
+                        <Label Content="Flash Duration (milliseconds):" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Slider x:Name="BlinkDurationSlider" Grid.Column="0" Minimum="10" Maximum="3000" Value="1000" TickFrequency="10" IsSnapToTickEnabled="True" LargeChange="100" SmallChange="10"/>
+                            <TextBlock x:Name="BlinkDurationText" Grid.Column="1" Text="1000 ms" Width="70" TextAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        
+                        <Label Content="Quick Presets:" Margin="0,5,0,0"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <Button x:Name="Duration10msButton" Content="10ms" Width="50" Height="25" Margin="0,0,5,0" Click="DurationPreset_Click" Tag="10"/>
+                            <Button x:Name="Duration50msButton" Content="50ms" Width="50" Height="25" Margin="0,0,5,0" Click="DurationPreset_Click" Tag="50"/>
+                            <Button x:Name="Duration100msButton" Content="100ms" Width="50" Height="25" Margin="0,0,5,0" Click="DurationPreset_Click" Tag="100"/>
+                            <Button x:Name="Duration250msButton" Content="250ms" Width="50" Height="25" Margin="0,0,5,0" Click="DurationPreset_Click" Tag="250"/>
+                            <Button x:Name="Duration500msButton" Content="500ms" Width="50" Height="25" Margin="0,0,5,0" Click="DurationPreset_Click" Tag="500"/>
+                            <Button x:Name="Duration1000msButton" Content="1000ms" Width="55" Height="25" Margin="0,0,5,0" Click="DurationPreset_Click" Tag="1000"/>
+                        </StackPanel>
+                        
+                        <Label Content="Flash Color:" />
+                        <ComboBox x:Name="BlinkColorComboBox">
+                            <ComboBoxItem Content="White"/>
+                            <ComboBoxItem Content="Black"/>
+                            <ComboBoxItem Content="Red"/>
+                            <ComboBoxItem Content="Green"/>
+                            <ComboBoxItem Content="Blue"/>
+                        </ComboBox>
+                        
+                        <Button x:Name="TestBlinkButton" Content="Test Blink Flash" Width="120" Height="30" Margin="0,10,0,0" Click="TestBlinkButton_Click"/>
+                    </StackPanel>
+                </GroupBox>
+                
+                <!-- Break Reminder Settings -->
+                <GroupBox Header="Break Reminder" Margin="0,0,0,15">
+                    <StackPanel Margin="10">
+                        <CheckBox x:Name="BreakEnabledCheckBox" Content="Enable break reminders" Margin="0,0,0,10"/>
+                        
+                        <Label Content="Interval (minutes):" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Slider x:Name="BreakIntervalSlider" Grid.Column="0" Minimum="5" Maximum="60" Value="20" TickFrequency="5" IsSnapToTickEnabled="True"/>
+                            <TextBlock x:Name="BreakIntervalText" Grid.Column="1" Text="20 min" Width="50" TextAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        
+                        <Label Content="Break Duration (seconds):" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Slider x:Name="BreakDurationSlider" Grid.Column="0" Minimum="10" Maximum="120" Value="20" TickFrequency="10" IsSnapToTickEnabled="True"/>
+                            <TextBlock x:Name="BreakDurationText" Grid.Column="1" Text="20 sec" Width="50" TextAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        
+                        <Label Content="Background Color:" />
+                        <ComboBox x:Name="BreakColorComboBox">
+                            <ComboBoxItem Content="Black"/>
+                            <ComboBoxItem Content="White"/>
+                            <ComboBoxItem Content="Red"/>
+                            <ComboBoxItem Content="Green"/>
+                            <ComboBoxItem Content="Blue"/>
+                        </ComboBox>
+                    </StackPanel>
+                </GroupBox>
+                
+                <!-- Enforcement Settings -->
+                <GroupBox Header="Enforcement" Margin="0,0,0,15">
+                    <StackPanel Margin="10">
+                        <CheckBox x:Name="AllowSnoozeCheckBox" Content="Allow snooze/skip options" Margin="0,0,0,10"/>
+                        
+                        <Label Content="Snooze Delay (minutes):" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Slider x:Name="SnoozeDelaySlider" Grid.Column="0" Minimum="1" Maximum="15" Value="5" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                            <TextBlock x:Name="SnoozeDelayText" Grid.Column="1" Text="5 min" Width="50" TextAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        
+                        <CheckBox x:Name="BlockInputCheckBox" Content="Block input during breaks (strict mode)" Margin="0,10,0,0"/>
+                    </StackPanel>
+                </GroupBox>
+                
+                <!-- General Settings -->
+                <GroupBox Header="General" Margin="0,0,0,15">
+                    <StackPanel Margin="10">
+                        <CheckBox x:Name="AutoStartCheckBox" Content="Start with Windows" Margin="0,0,0,10"/>
+                        <CheckBox x:Name="CoverAllMonitorsCheckBox" Content="Cover all monitors" Margin="0,0,0,10"/>
+                        <CheckBox x:Name="ShowNotificationsCheckBox" Content="Show notifications" Margin="0,0,0,10"/>
+                    </StackPanel>
+                </GroupBox>
+                
+            </StackPanel>
+        </ScrollViewer>
+        
+        <!-- Buttons -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="20">
+            <Button x:Name="SaveButton" Content="Save" Width="80" Height="30" Margin="0,0,10,0" Click="SaveButton_Click"/>
+            <Button x:Name="CancelButton" Content="Cancel" Width="80" Height="30" Click="CancelButton_Click"/>
+        </StackPanel>
+        
+    </Grid>
+</Window> 
