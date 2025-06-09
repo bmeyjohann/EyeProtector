@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using System.Linq;
 
 namespace EyeBreakEnforcer.Windows
 {
@@ -54,10 +55,15 @@ namespace EyeBreakEnforcer.Windows
             if (_settings.CoverAllMonitors)
             {
                 var totalBounds = GetTotalScreenBounds();
+                WindowState = WindowState.Normal;
                 Left = totalBounds.Left;
                 Top = totalBounds.Top;
                 Width = totalBounds.Width;
                 Height = totalBounds.Height;
+            }
+            else
+            {
+                WindowState = WindowState.Maximized;
             }
         }
 
