@@ -106,9 +106,23 @@ namespace EyeBreakEnforcer.Services
                     pauseInfo = $" ({FormatTime(resumeIn.Value)})";
                 }
                 status = $"EyeBreakEnforcer - Paused{pauseInfo}";
+
+                var pauseResumeItem = _contextMenu?.Items["PauseResume"] as ToolStripMenuItem;
+                if (pauseResumeItem != null)
+                {
+                    pauseResumeItem.Text = resumeIn.HasValue && resumeIn.Value > TimeSpan.Zero
+                        ? $"Resume ({FormatTime(resumeIn.Value)})"
+                        : "Resume";
+                }
             }
             else
             {
+                var pauseResumeItem = _contextMenu?.Items["PauseResume"] as ToolStripMenuItem;
+                if (pauseResumeItem != null)
+                {
+                    pauseResumeItem.Text = "Pause";
+                }
+
                 var nextEvent = "";
                 if (nextBlink.HasValue)
                 {
