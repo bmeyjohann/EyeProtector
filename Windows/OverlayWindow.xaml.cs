@@ -29,10 +29,16 @@ namespace EyeBreakEnforcer.Windows
             if (_settings.CoverAllMonitors)
             {
                 var totalBounds = GetTotalScreenBounds();
+                WindowState = WindowState.Normal;
                 Left = totalBounds.Left;
                 Top = totalBounds.Top;
                 Width = totalBounds.Width;
                 Height = totalBounds.Height;
+            }
+            else
+            {
+                // Default to maximizing on the current monitor
+                WindowState = WindowState.Maximized;
             }
         }
 
