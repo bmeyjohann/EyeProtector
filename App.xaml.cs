@@ -57,6 +57,7 @@ namespace EyeBreakEnforcer
             _trayIconManager.SettingsRequested += OnSettingsRequested;
             _trayIconManager.PauseRequested += OnPauseRequested;
             _trayIconManager.ResumeRequested += OnResumeRequested;
+            _trayIconManager.PauseForRequested += OnPauseForRequested;
             _trayIconManager.ExitRequested += OnExitRequested;
             _trayIconManager.Initialize();
         }
@@ -197,6 +198,19 @@ namespace EyeBreakEnforcer
             }
         }
 
+        private void OnPauseForRequested(TimeSpan duration)
+        {
+            _timerService?.PauseFor(duration);
+            _trayIconManager?.SetPausedState(true);
+
+            if (_settingsService?.CurrentSettings.ShowNotifications == true)
+            {
+                var minutes = (int)duration.TotalMinutes;
+                string text = $"Eye protection reminders paused for {minutes} minute" + (minutes == 1 ? "" : "s") + ".";
+                _trayIconManager?.ShowBalloonTip("Paused", text, System.Windows.Forms.ToolTipIcon.Info);
+            }
+        }
+
         private void OnExitRequested()
         {
             var result = System.Windows.MessageBox.Show("Are you sure you want to exit EyeBreakEnforcer?", 
@@ -216,8 +230,9 @@ namespace EyeBreakEnforcer
             {
                 var nextBlink = _timerService.GetTimeUntilNextBlink();
                 var nextBreak = _timerService.GetTimeUntilNextBreak();
-                
-                _trayIconManager.UpdateStatus(_timerService.IsRunning, nextBlink, nextBreak);
+                var resumeIn = _timerService.GetTimeUntilResume();
+
+                _trayIconManager.UpdateStatus(_timerService.IsRunning, nextBlink, nextBreak, resumeIn);
             }
         }
 

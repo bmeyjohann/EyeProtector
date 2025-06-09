@@ -7,28 +7,36 @@ namespace EyeBreakEnforcer.Services
     {
         private readonly System.Timers.Timer _blinkTimer;
         private readonly System.Timers.Timer _breakTimer;
+        private readonly System.Timers.Timer _resumeTimer;
         private AppSettings _settings;
         private bool _isPaused;
+        private DateTime? _resumeTime;
 
         public event Action? BlinkReminderTriggered;
         public event Action? BreakReminderTriggered;
 
         public bool IsRunning { get; private set; }
+        public bool IsPaused => _isPaused;
         public DateTime? NextBlinkTime { get; private set; }
         public DateTime? NextBreakTime { get; private set; }
+        public DateTime? ResumeTime => _resumeTime;
 
         public TimerService(AppSettings settings)
         {
             _settings = settings;
-            
+
             _blinkTimer = new System.Timers.Timer();
             _blinkTimer.Elapsed += OnBlinkTimerElapsed;
             _blinkTimer.AutoReset = true;
-            
+
             _breakTimer = new System.Timers.Timer();
             _breakTimer.Elapsed += OnBreakTimerElapsed;
             _breakTimer.AutoReset = true;
-            
+
+            _resumeTimer = new System.Timers.Timer();
+            _resumeTimer.Elapsed += OnResumeTimerElapsed;
+            _resumeTimer.AutoReset = false;
+
             UpdateTimerIntervals();
         }
 
@@ -59,10 +67,12 @@ namespace EyeBreakEnforcer.Services
         {
             _blinkTimer.Stop();
             _breakTimer.Stop();
+            _resumeTimer.Stop();
             IsRunning = false;
             _isPaused = false;
             NextBlinkTime = null;
             NextBreakTime = null;
+            _resumeTime = null;
         }
 
         public void Pause()
@@ -71,6 +81,8 @@ namespace EyeBreakEnforcer.Services
             {
                 _blinkTimer.Stop();
                 _breakTimer.Stop();
+                _resumeTimer.Stop();
+                _resumeTime = null;
                 _isPaused = true;
             }
         }
@@ -79,6 +91,8 @@ namespace EyeBreakEnforcer.Services
         {
             if (_isPaused)
             {
+                _resumeTimer.Stop();
+                _resumeTime = null;
                 if (_settings.BlinkReminderEnabled)
                 {
                     _blinkTimer.Start();
@@ -93,6 +107,17 @@ namespace EyeBreakEnforcer.Services
 
                 _isPaused = false;
             }
+        }
+
+        public void PauseFor(TimeSpan duration)
+        {
+            if (!IsRunning)
+                return;
+
+            Pause();
+            _resumeTimer.Interval = duration.TotalMilliseconds;
+            _resumeTimer.Start();
+            _resumeTime = DateTime.Now.Add(duration);
         }
 
         public void SnoozeBreak()
@@ -171,6 +196,11 @@ namespace EyeBreakEnforcer.Services
             }
         }
 
+        private void OnResumeTimerElapsed(object? sender, ElapsedEventArgs e)
+        {
+            Resume();
+        }
+
         public TimeSpan GetTimeUntilNextBlink()
         {
             if (NextBlinkTime.HasValue && IsRunning)
@@ -191,10 +221,21 @@ namespace EyeBreakEnforcer.Services
             return TimeSpan.Zero;
         }
 
+        public TimeSpan GetTimeUntilResume()
+        {
+            if (_resumeTime.HasValue && _isPaused)
+            {
+                var timeLeft = _resumeTime.Value - DateTime.Now;
+                return timeLeft > TimeSpan.Zero ? timeLeft : TimeSpan.Zero;
+            }
+            return TimeSpan.Zero;
+        }
+
         public void Dispose()
         {
             _blinkTimer?.Dispose();
             _breakTimer?.Dispose();
+            _resumeTimer?.Dispose();
         }
     }
 } 

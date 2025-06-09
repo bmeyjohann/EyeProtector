@@ -12,6 +12,7 @@ namespace EyeBreakEnforcer.Services
         public event Action? SettingsRequested;
         public event Action? PauseRequested;
         public event Action? ResumeRequested;
+        public event Action<TimeSpan>? PauseForRequested;
         public event Action? ExitRequested;
 
         public void Initialize()
@@ -26,6 +27,8 @@ namespace EyeBreakEnforcer.Services
 
             var settingsItem = new ToolStripMenuItem("Settings", null, OnSettingsClick);
             var pauseResumeItem = new ToolStripMenuItem("Pause", null, OnPauseResumeClick) { Name = "PauseResume" };
+            var pause5Item = new ToolStripMenuItem("Pause 5 min", null, (s, e) => OnTimedPauseClick(TimeSpan.FromMinutes(5)));
+            var pause1hItem = new ToolStripMenuItem("Pause 1 h", null, (s, e) => OnTimedPauseClick(TimeSpan.FromHours(1)));
             var separatorItem = new ToolStripSeparator();
             var exitItem = new ToolStripMenuItem("Exit", null, OnExitClick);
 
@@ -33,6 +36,8 @@ namespace EyeBreakEnforcer.Services
             {
                 settingsItem,
                 pauseResumeItem,
+                pause5Item,
+                pause1hItem,
                 separatorItem,
                 exitItem
             });
@@ -65,7 +70,26 @@ namespace EyeBreakEnforcer.Services
             return Icon.FromHandle(bitmap.GetHicon());
         }
 
-        public void UpdateStatus(bool isRunning, TimeSpan? nextBlink = null, TimeSpan? nextBreak = null)
+        private static string FormatTime(TimeSpan time)
+        {
+            var totalSeconds = (int)time.TotalSeconds;
+            if (totalSeconds >= 3600)
+            {
+                var hours = totalSeconds / 3600;
+                var minutes = (totalSeconds % 3600) / 60;
+                return $"{hours}h{minutes}m";
+            }
+            else if (totalSeconds >= 60)
+            {
+                var minutes = totalSeconds / 60;
+                var seconds = totalSeconds % 60;
+                return $"{minutes}m{seconds}s";
+            }
+
+            return $"{totalSeconds}s";
+        }
+
+        public void UpdateStatus(bool isRunning, TimeSpan? nextBlink = null, TimeSpan? nextBreak = null, TimeSpan? resumeIn = null)
         {
             if (_notifyIcon == null) return;
 
@@ -76,7 +100,12 @@ namespace EyeBreakEnforcer.Services
             }
             else if (_isPaused)
             {
-                status = "EyeBreakEnforcer - Paused";
+                var pauseInfo = string.Empty;
+                if (resumeIn.HasValue && resumeIn.Value > TimeSpan.Zero)
+                {
+                    pauseInfo = $" ({FormatTime(resumeIn.Value)})";
+                }
+                status = $"EyeBreakEnforcer - Paused{pauseInfo}";
             }
             else
             {
@@ -132,6 +161,11 @@ namespace EyeBreakEnforcer.Services
             {
                 PauseRequested?.Invoke();
             }
+        }
+
+        private void OnTimedPauseClick(TimeSpan duration)
+        {
+            PauseForRequested?.Invoke(duration);
         }
 
         private void OnExitClick(object? sender, EventArgs e)
