@@ -3,6 +3,7 @@ using EyeBreakEnforcer.Services;
 using EyeBreakEnforcer.Windows;
 using System.Windows;
 using System.Windows.Threading;
+using Microsoft.Win32;
 
 namespace EyeBreakEnforcer
 {
@@ -31,6 +32,9 @@ namespace EyeBreakEnforcer
             InitializeServices();
             SetupStatusUpdateTimer();
             StartApplication();
+
+            SystemEvents.SessionSwitch += OnSessionSwitch;
+            SystemEvents.PowerModeChanged += OnPowerModeChanged;
         }
 
         private bool IsAnotherInstanceRunning()
@@ -236,16 +240,46 @@ namespace EyeBreakEnforcer
             }
         }
 
+        private void OnSessionSwitch(object? sender, SessionSwitchEventArgs e)
+        {
+            if (e.Reason == SessionSwitchReason.SessionLock)
+            {
+                _timerService?.Stop();
+            }
+            else if (e.Reason == SessionSwitchReason.SessionUnlock)
+            {
+                _timerService?.Start();
+            }
+        }
+
+        private void OnPowerModeChanged(object? sender, PowerModeChangedEventArgs e)
+        {
+            if (e.Mode == PowerModes.Suspend)
+            {
+                _timerService?.Stop();
+            }
+            else if (e.Mode == PowerModes.Resume)
+            {
+                _timerService?.Start();
+            }
+        }
+
         protected override void OnExit(ExitEventArgs e)
         {
             // Clean up resources
+            // Save current settings before disposing services
+            _settingsService?.SaveSettings(_settingsService.CurrentSettings);
+
             _statusUpdateTimer?.Stop();
             _timerService?.Stop();
             _timerService?.Dispose();
             _trayIconManager?.Dispose();
             _overlayWindow?.ForceClose();
             _settingsWindow?.Close();
-            
+
+            SystemEvents.SessionSwitch -= OnSessionSwitch;
+            SystemEvents.PowerModeChanged -= OnPowerModeChanged;
+
             base.OnExit(e);
         }
     }
