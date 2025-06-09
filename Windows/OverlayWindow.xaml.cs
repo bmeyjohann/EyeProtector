@@ -54,22 +54,28 @@ namespace EyeBreakEnforcer.Windows
             if (_settings.CoverAllMonitors)
             {
                 var totalBounds = GetTotalScreenBounds();
+                WindowState = WindowState.Normal;
                 Left = totalBounds.Left;
                 Top = totalBounds.Top;
                 Width = totalBounds.Width;
                 Height = totalBounds.Height;
             }
+            else
+            {
+                // Default to maximizing on the current monitor
+                WindowState = WindowState.Maximized;
+            }
         }
 
         private Rect GetTotalScreenBounds()
         {
-            var screens = System.Windows.Forms.Screen.AllScreens;
-            var left = screens.Min(s => s.Bounds.Left);
-            var top = screens.Min(s => s.Bounds.Top);
-            var right = screens.Max(s => s.Bounds.Right);
-            var bottom = screens.Max(s => s.Bounds.Bottom);
-            
-            return new Rect(left, top, right - left, bottom - top);
+            // Use SystemParameters to get the virtual screen size in
+            // device-independent units so that DPI scaling is handled
+            return new Rect(
+                SystemParameters.VirtualScreenLeft,
+                SystemParameters.VirtualScreenTop,
+                SystemParameters.VirtualScreenWidth,
+                SystemParameters.VirtualScreenHeight);
         }
 
         public void ShowBlinkFlash(AppSettings settings)
