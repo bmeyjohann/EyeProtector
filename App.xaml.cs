@@ -224,6 +224,9 @@ namespace EyeBreakEnforcer
         protected override void OnExit(ExitEventArgs e)
         {
             // Clean up resources
+            // Save current settings before disposing services
+            _settingsService?.SaveSettings(_settingsService.CurrentSettings);
+
             _statusUpdateTimer?.Stop();
             _timerService?.Stop();
             _timerService?.Dispose();
