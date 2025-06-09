@@ -1,221 +1,185 @@
-# EyeBreakEnforcer Setup Guide
+# EyeBreakEnforcer - Setup and Build Guide
 
-## Prerequisites Installation
+## Prerequisites
 
-### Step 1: Install .NET 9 SDK
+- **Windows 10/11** (64-bit)
+- **.NET 9 SDK** or later
+  - Download from: https://dotnet.microsoft.com/download/dotnet/9.0
+  - Choose "SDK" version for building the application
 
-1. **Download .NET 9 SDK**:
-   - Go to: https://dotnet.microsoft.com/download/dotnet/9.0
-   - Click "Download .NET 9.0 SDK" for Windows
-   - Choose the appropriate version (x64 for most modern Windows systems)
+## Quick Start
 
-2. **Install the SDK**:
-   - Run the downloaded installer
-   - Follow the installation wizard
-   - Restart your command prompt/PowerShell after installation
+### Option 1: Use Pre-built Standalone Executable ⭐ **RECOMMENDED**
 
-3. **Verify Installation**:
-   ```bash
-   dotnet --version
-   ```
-   Should display something like `9.0.xxx`
+The simplest way to distribute and run the application:
 
-### Step 2: Verify System Requirements
+1. Navigate to `bin/Release/net9.0-windows/win-x64/publish/`
+2. Copy `EyeBreakEnforcer.exe` (163 MB)
+3. **That's it!** This single file contains everything needed to run the app
+4. No .NET installation required on target machines
+5. Just double-click to run or distribute to others
 
-- **Operating System**: Windows 10 (version 1607+) or Windows 11
-- **Architecture**: x64, x86, or ARM64
-- **Memory**: At least 512 MB RAM
-- **Disk Space**: At least 200 MB available
-
-## Building the Application
-
-### Option 1: Command Line Build
-
-1. **Open PowerShell or Command Prompt**
-2. **Navigate to the project directory**:
-   ```bash
-   cd C:\Data\EyeProtector
-   ```
-
-3. **Restore dependencies**:
-   ```bash
-   dotnet restore
-   ```
-
-4. **Build the application**:
-   ```bash
-   dotnet build --configuration Release
-   ```
-
-5. **Run the application**:
-   ```bash
-   dotnet run --configuration Release
-   ```
-
-### Option 2: Create Standalone Executable
-
-For a self-contained executable that doesn't require .NET runtime on target machines:
+### Option 2: Build from Source
 
 ```bash
-dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
+# Clone or download the source code
+cd EyeBreakEnforcer
+
+# Build standalone executable (recommended for distribution)
+dotnet publish -c Release
+
+# OR build framework-dependent version (smaller, requires .NET 9 Runtime)
+dotnet build -c Release
 ```
 
-The executable will be located at:
-`bin\Release\net9.0-windows\win-x64\publish\EyeBreakEnforcer.exe`
+## Distribution Options
 
-### Option 3: Framework-Dependent Deployment
+### 🎯 **Standalone Distribution** (Best for sharing with others)
+- **File**: `bin/Release/net9.0-windows/win-x64/publish/EyeBreakEnforcer.exe`
+- **Size**: ~163 MB (single file)
+- **Requirements**: None (includes .NET runtime)
+- **Distribution**: Just share this one `.exe` file
 
-For smaller file size (requires .NET 9 runtime on target machine):
+### 📦 **Framework-Dependent Distribution** (Smaller size)
+- **Files**: Everything in `bin/Release/net9.0-windows/`
+- **Size**: ~3 MB (multiple files)
+- **Requirements**: Target machine needs .NET 9 Desktop Runtime
+- **Distribution**: Share the entire folder contents
+
+## Building Different Versions
 
 ```bash
-dotnet publish -c Release -r win-x64 --self-contained false
+# Standalone executable (default with updated project file)
+dotnet publish -c Release
+
+# Framework-dependent build
+dotnet build -c Release
+
+# Create installer-ready version with optimizations
+dotnet publish -c Release --verbosity minimal
+
+# Debug version for development
+dotnet build -c Debug
 ```
 
-## Development Environment Setup
+## Installation
 
-### Visual Studio 2022 (Recommended)
+### For End Users (Standalone)
+1. Download `EyeBreakEnforcer.exe`
+2. Place it anywhere you want (e.g., `C:\Program Files\EyeBreakEnforcer\`)
+3. Create a desktop shortcut (optional)
+4. Run the application - it will add itself to the system tray
 
-1. **Download Visual Studio 2022**:
-   - Community Edition (free): https://visualstudio.microsoft.com/vs/community/
-   - Include ".NET desktop development" workload during installation
+### For Developers
+1. Install .NET 9 SDK
+2. Clone this repository
+3. Run `dotnet restore` to install dependencies
+4. Run `dotnet run` for development or `dotnet publish -c Release` for distribution
 
-2. **Open the project**:
-   - File → Open → Project/Solution
-   - Select `EyeBreakEnforcer.csproj`
+## Project Structure
 
-3. **Build and run**:
-   - Press F5 to build and run
-   - Or Build → Build Solution (Ctrl+Shift+B)
-
-### Visual Studio Code
-
-1. **Install VS Code**: https://code.visualstudio.com/
-2. **Install C# extension**: 
-   - Open Extensions (Ctrl+Shift+X)
-   - Search for "C#" by Microsoft
-   - Install the extension
-
-3. **Open project folder**:
-   - File → Open Folder
-   - Select the EyeProtector directory
-
-4. **Build and run**:
-   - Terminal → New Terminal
-   - Run: `dotnet build` and `dotnet run`
-
-## Common Build Issues
-
-### Issue: "dotnet" not recognized
-
-**Solution**: 
-- Restart your terminal/command prompt after installing .NET 9 SDK
-- If still not working, add .NET to your PATH:
-  1. Open System Properties → Advanced → Environment Variables
-  2. Add to PATH: `C:\Program Files\dotnet\`
-
-### Issue: Missing Windows Forms reference
-
-**Solution**: The project file should automatically handle this, but if you get errors:
-```bash
-dotnet add package Microsoft.WindowsDesktop.App
+```
+EyeBreakEnforcer/
+├── Models/           # Configuration data models
+├── Services/         # Core application services
+├── Windows/          # WPF windows (Settings, Overlay)
+├── App.xaml/.cs      # Main application entry point
+├── *.csproj          # Project configuration
+└── bin/Release/      # Build outputs
+    └── net9.0-windows/
+        ├── [framework-dependent files]
+        └── win-x64/publish/
+            └── EyeBreakEnforcer.exe  # ← Standalone version
 ```
 
-### Issue: Missing dependencies
+## Features Included
 
-**Solution**: Restore NuGet packages:
-```bash
-dotnet restore
-```
+✅ **20-20-20 Rule Enforcement**
+- Configurable blink reminders (default: every 5 minutes)
+- Configurable break enforcement (default: every 20 minutes for 20 seconds)
 
-### Issue: WPF/Windows Forms compatibility
+✅ **System Integration**
+- System tray operation
+- Windows startup integration
+- Multi-monitor support
+- Settings persistence
 
-**Solution**: Ensure you're targeting `net9.0-windows`:
-- Check that `<TargetFramework>net9.0-windows</TargetFramework>` is in the .csproj file
-- Check that `<UseWPF>true</UseWPF>` is present
-
-## Testing the Build
-
-1. **Quick test**:
-   ```bash
-   dotnet run
-   ```
-   - Application should start and appear in system tray
-   - Right-click tray icon to test context menu
-
-2. **Test features**:
-   - Open Settings (right-click tray → Settings)
-   - Set blink interval to 1 minute for quick testing
-   - Verify overlay appears after 1 minute
-
-3. **Test break functionality**:
-   - Set break interval to 2 minutes
-   - Wait for break overlay to appear
-   - Test Skip and Snooze buttons
-
-## Distribution
-
-### Creating an Installer
-
-For professional distribution, consider creating an MSI installer:
-
-1. **Install WiX Toolset**: https://wixtoolset.org/
-2. **Create installer project** using WiX templates
-3. **Include .NET 9 Runtime** as prerequisite
-
-### Simple Distribution
-
-For personal use:
-1. Create self-contained executable (see Option 2 above)
-2. Copy the executable to desired location
-3. Create desktop shortcut if needed
-4. Add to Windows startup folder for auto-start:
-   - Copy shortcut to: `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup`
+✅ **User Experience**
+- Intuitive settings interface
+- Pause/resume functionality
+- Snooze options
+- Visual and behavioral customization
 
 ## Troubleshooting
 
-### Build Errors
+### Common Issues
 
-**Error: SDK not found**
-- Reinstall .NET 9 SDK
-- Verify installation with `dotnet --version`
+**"Application won't start"**
+- Ensure you're using the 64-bit Windows version
+- For framework-dependent: Install .NET 9 Desktop Runtime
 
-**Error: Project doesn't load**
-- Check .csproj file format
-- Ensure all files are in correct directories
-
-**Error: Reference issues**
-- Run `dotnet restore` to download packages
-- Check internet connection
-
-### Runtime Errors
-
-**Application doesn't start**
-- Check Windows Event Viewer for detailed errors
-- Run from command line to see error messages
-- Verify .NET 9 runtime is installed
-
-**System tray icon doesn't appear**
-- Check Windows notification area settings
+**"Settings not saving"**
+- Check write permissions to `%APPDATA%\EyeBreakEnforcer\`
 - Run as administrator if needed
-- Verify Windows Forms is working
 
-### Performance Issues
+**"Overlay not showing on all monitors"**
+- This is expected behavior - overlays cover all connected displays
 
-**High CPU usage**
-- Check timer intervals in settings
-- Look for infinite loops in logs
-- Monitor with Task Manager
+**"Auto-start not working"**
+- Check Windows Startup settings in Task Manager > Startup tab
+- Verify registry permissions (HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run)
 
-**Memory leaks**
-- Ensure proper disposal of resources
-- Check for event handler leaks
-- Monitor memory usage over time
+### Build Issues
 
-## Next Steps
+**"SDK not found"**
+```bash
+# Verify .NET installation
+dotnet --version
 
-After successful build:
-1. Review the main README.md for usage instructions
-2. Test all features thoroughly
-3. Configure settings for your preferences
-4. Set up auto-start if desired
-5. Create desktop shortcuts for easy access 
+# Should show 9.0.x or later
+```
+
+**"Package restore failed"**
+```bash
+# Clear NuGet cache and restore
+dotnet nuget locals all --clear
+dotnet restore
+```
+
+## Advanced Configuration
+
+### Custom Build Options
+
+```bash
+# Build for specific Windows version
+dotnet publish -c Release -r win-x64 --os win
+
+# Create optimized release build
+dotnet publish -c Release -p:PublishReadyToRun=true
+
+# Debug symbols in release build
+dotnet publish -c Release -p:DebugType=embedded
+```
+
+### Registry Settings (Advanced Users)
+
+The application stores startup configuration in:
+`HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run`
+
+Settings are stored in JSON format at:
+`%APPDATA%\EyeBreakEnforcer\settings.json`
+
+## Security Notes
+
+- The application requires no administrator privileges for normal operation
+- Auto-start functionality modifies user registry (HKCU only, not HKLM)
+- No network connectivity required
+- All data stored locally in user's AppData folder
+
+## Support
+
+For issues, feature requests, or contributions:
+1. Check this documentation first
+2. Verify you have the latest version
+3. Check Windows Event Viewer for any error details
+4. Review the settings.json file for configuration issues 
