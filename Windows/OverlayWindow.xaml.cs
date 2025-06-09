@@ -3,6 +3,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
 
 namespace EyeBreakEnforcer.Windows
 {
@@ -15,6 +17,29 @@ namespace EyeBreakEnforcer.Windows
         private Action? _onBreakComplete;
         private Action? _onBreakSkipped;
         private Action? _onBreakSnoozed;
+
+        private const int GWL_EXSTYLE = -20;
+        private const int WS_EX_TRANSPARENT = 0x00000020;
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        private void EnableClickThrough()
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            int styles = GetWindowLong(hwnd, GWL_EXSTYLE);
+            SetWindowLong(hwnd, GWL_EXSTYLE, styles | WS_EX_TRANSPARENT);
+        }
+
+        private void DisableClickThrough()
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            int styles = GetWindowLong(hwnd, GWL_EXSTYLE);
+            SetWindowLong(hwnd, GWL_EXSTYLE, styles & ~WS_EX_TRANSPARENT);
+        }
 
         public OverlayWindow()
         {
@@ -60,9 +85,11 @@ namespace EyeBreakEnforcer.Windows
             Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(color.R, color.G, color.B));
             
             SetupWindow();
+            IsHitTestVisible = false;
+            Focusable = false;
+            Topmost = true;
             Show();
-            Activate();
-            Focus();
+            EnableClickThrough();
             
             // Auto-hide after specified duration
             var timer = new DispatcherTimer();
@@ -71,6 +98,9 @@ namespace EyeBreakEnforcer.Windows
             {
                 timer.Stop();
                 Hide();
+                DisableClickThrough();
+                IsHitTestVisible = true;
+                Focusable = true;
             };
             timer.Start();
         }
@@ -83,6 +113,10 @@ namespace EyeBreakEnforcer.Windows
             _onBreakSkipped = onSkipped;
             _onBreakSnoozed = onSnoozed;
             _remainingSeconds = settings.BreakDurationSeconds;
+
+            DisableClickThrough();
+            IsHitTestVisible = true;
+            Focusable = true;
             
             // Set background color
             var color = settings.GetBreakColor();
