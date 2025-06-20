@@ -1,11 +1,11 @@
-using EyeBreakEnforcer.Models;
-using EyeBreakEnforcer.Services;
-using EyeBreakEnforcer.Windows;
+using EyeProtector.Models;
+using EyeProtector.Services;
+using EyeProtector.Windows;
 using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Win32;
 
-namespace EyeBreakEnforcer
+namespace EyeProtector
 {
     public partial class App : System.Windows.Application
     {
@@ -23,7 +23,7 @@ namespace EyeBreakEnforcer
             // Ensure single instance
             if (IsAnotherInstanceRunning())
             {
-                System.Windows.MessageBox.Show("EyeBreakEnforcer is already running.", "Already Running", 
+                System.Windows.MessageBox.Show("EyeProtector is already running.", "Already Running", 
                                MessageBoxButton.OK, MessageBoxImage.Information);
                 Shutdown();
                 return;
@@ -39,7 +39,7 @@ namespace EyeBreakEnforcer
 
         private bool IsAnotherInstanceRunning()
         {
-            var processes = System.Diagnostics.Process.GetProcessesByName("EyeBreakEnforcer");
+            var processes = System.Diagnostics.Process.GetProcessesByName("EyeProtector");
             return processes.Length > 1;
         }
 
@@ -80,7 +80,7 @@ namespace EyeBreakEnforcer
             
             if (_settingsService?.CurrentSettings.ShowNotifications == true)
             {
-                _trayIconManager?.ShowBalloonTip("EyeBreakEnforcer", 
+                _trayIconManager?.ShowBalloonTip("EyeProtector", 
                     "Application started. Eye protection is now active.", 
                     System.Windows.Forms.ToolTipIcon.Info);
             }
@@ -217,7 +217,7 @@ namespace EyeBreakEnforcer
 
         private void OnExitRequested()
         {
-            var result = System.Windows.MessageBox.Show("Are you sure you want to exit EyeBreakEnforcer?", 
+            var result = System.Windows.MessageBox.Show("Are you sure you want to exit EyeProtector?", 
                                        "Confirm Exit", 
                                        MessageBoxButton.YesNo, 
                                        MessageBoxImage.Question);

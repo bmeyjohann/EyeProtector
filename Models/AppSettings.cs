@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace EyeBreakEnforcer.Models
+namespace EyeProtector.Models
 {
     public class AppSettings
     {

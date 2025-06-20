@@ -2,7 +2,7 @@ Product Specification for the App
 Here’s a structured product spec you can pass to a developer to create this:
 
 1️⃣ App Overview
-Name: “EyeBreakEnforcer” (or pick your own)
+Name: “EyeProtector” (or pick your own)
 
 Platform: Windows 10/11
 

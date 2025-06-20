@@ -1,7 +1,7 @@
-using EyeBreakEnforcer.Models;
+using EyeProtector.Models;
 using System.Timers;
 
-namespace EyeBreakEnforcer.Services
+namespace EyeProtector.Services
 {
     public class TimerService : IDisposable
     {

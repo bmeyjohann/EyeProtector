@@ -1,9 +1,9 @@
-using EyeBreakEnforcer.Models;
-using EyeBreakEnforcer.Windows;
+using EyeProtector.Models;
+using EyeProtector.Windows;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace EyeBreakEnforcer.Windows
+namespace EyeProtector.Windows
 {
     public partial class SettingsWindow : Window
     {
@@ -66,7 +66,7 @@ namespace EyeBreakEnforcer.Windows
 
             // General settings
             // Check actual Windows startup status and update settings if needed
-            var actualAutoStart = EyeBreakEnforcer.Services.StartupManager.IsAutoStartEnabled();
+            var actualAutoStart = EyeProtector.Services.StartupManager.IsAutoStartEnabled();
             if (_currentSettings.AutoStartWithWindows != actualAutoStart)
             {
                 _currentSettings.AutoStartWithWindows = actualAutoStart;
@@ -198,7 +198,7 @@ namespace EyeBreakEnforcer.Windows
             {
                 try
                 {
-                    var success = EyeBreakEnforcer.Services.StartupManager.SetAutoStart(newAutoStart);
+                    var success = EyeProtector.Services.StartupManager.SetAutoStart(newAutoStart);
                     if (!success)
                     {
                         System.Windows.MessageBox.Show("Failed to update Windows startup setting. You may need to run as administrator.", 

@@ -1,8 +1,8 @@
-using EyeBreakEnforcer.Models;
+using EyeProtector.Models;
 using Newtonsoft.Json;
 using System.IO;
 
-namespace EyeBreakEnforcer.Services
+namespace EyeProtector.Services
 {
     public class SettingsService
     {
@@ -12,7 +12,7 @@ namespace EyeBreakEnforcer.Services
         public SettingsService()
         {
             var appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var appFolder = Path.Combine(appDataFolder, "EyeBreakEnforcer");
+            var appFolder = Path.Combine(appDataFolder, "EyeProtector");
             
             if (!Directory.Exists(appFolder))
             {

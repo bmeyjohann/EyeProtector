@@ -1,4 +1,4 @@
-# EyeBreakEnforcer - Setup and Build Guide
+# EyeProtector - Setup and Build Guide
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@
 The simplest way to distribute and run the application:
 
 1. Navigate to `bin/Release/net9.0-windows/win-x64/publish/`
-2. Copy `EyeBreakEnforcer.exe` (163 MB)
+2. Copy `EyeProtector.exe` (163 MB)
 3. **That's it!** This single file contains everything needed to run the app
 4. No .NET installation required on target machines
 5. Just double-click to run or distribute to others
@@ -23,7 +23,7 @@ The simplest way to distribute and run the application:
 
 ```bash
 # Clone or download the source code
-cd EyeBreakEnforcer
+cd EyeProtector
 
 # Build standalone executable (recommended for distribution)
 dotnet publish -c Release
@@ -35,7 +35,7 @@ dotnet build -c Release
 ## Distribution Options
 
 ### 🎯 **Standalone Distribution** (Best for sharing with others)
-- **File**: `bin/Release/net9.0-windows/win-x64/publish/EyeBreakEnforcer.exe`
+- **File**: `bin/Release/net9.0-windows/win-x64/publish/EyeProtector.exe`
 - **Size**: ~163 MB (single file)
 - **Requirements**: None (includes .NET runtime)
 - **Distribution**: Just share this one `.exe` file
@@ -65,8 +65,8 @@ dotnet build -c Debug
 ## Installation
 
 ### For End Users (Standalone)
-1. Download `EyeBreakEnforcer.exe`
-2. Place it anywhere you want (e.g., `C:\Program Files\EyeBreakEnforcer\`)
+1. Download `EyeProtector.exe`
+2. Place it anywhere you want (e.g., `C:\Program Files\EyeProtector\`)
 3. Create a desktop shortcut (optional)
 4. Run the application - it will add itself to the system tray
 
@@ -79,7 +79,7 @@ dotnet build -c Debug
 ## Project Structure
 
 ```
-EyeBreakEnforcer/
+EyeProtector/
 ├── Models/           # Configuration data models
 ├── Services/         # Core application services
 ├── Windows/          # WPF windows (Settings, Overlay)
@@ -89,7 +89,7 @@ EyeBreakEnforcer/
     └── net9.0-windows/
         ├── [framework-dependent files]
         └── win-x64/publish/
-            └── EyeBreakEnforcer.exe  # ← Standalone version
+            └── EyeProtector.exe  # ← Standalone version
 ```
 
 ## Features Included
@@ -119,7 +119,7 @@ EyeBreakEnforcer/
 - For framework-dependent: Install .NET 9 Desktop Runtime
 
 **"Settings not saving"**
-- Check write permissions to `%APPDATA%\EyeBreakEnforcer\`
+- Check write permissions to `%APPDATA%\EyeProtector\`
 - Run as administrator if needed
 
 **"Overlay not showing on all monitors"**
@@ -167,7 +167,7 @@ The application stores startup configuration in:
 `HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run`
 
 Settings are stored in JSON format at:
-`%APPDATA%\EyeBreakEnforcer\settings.json`
+`%APPDATA%\EyeProtector\settings.json`
 
 ## Security Notes
 

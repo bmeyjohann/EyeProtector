@@ -2,11 +2,11 @@ using Microsoft.Win32;
 using System.IO;
 using System.Reflection;
 
-namespace EyeBreakEnforcer.Services
+namespace EyeProtector.Services
 {
     public static class StartupManager
     {
-        private const string AppName = "EyeBreakEnforcer";
+        private const string AppName = "EyeProtector";
         private const string RegistryKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
 
         /// <summary>

@@ -1,4 +1,4 @@
-using EyeBreakEnforcer.Models;
+using EyeProtector.Models;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -6,7 +6,7 @@ using System.Windows.Threading;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 
-namespace EyeBreakEnforcer.Windows
+namespace EyeProtector.Windows
 {
     public partial class OverlayWindow : Window
     {
