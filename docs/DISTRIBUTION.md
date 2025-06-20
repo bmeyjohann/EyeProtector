@@ -1,4 +1,4 @@
-# EyeBreakEnforcer - Distribution Guide
+# EyeProtector - Distribution Guide
 
 ## Two Distribution Options
 
@@ -7,7 +7,7 @@
 **Best for**: Sharing with friends, colleagues, or anyone without technical expertise
 
 ✅ **What you get:**
-- Single file: `EyeBreakEnforcer.exe` (163 MB)
+- Single file: `EyeProtector.exe` (163 MB)
 - Location: `bin/Release/net9.0-windows/win-x64/publish/`
 
 ✅ **Advantages:**
@@ -16,7 +16,7 @@
 - **No installation** - Double-click to run
 
 ✅ **How to distribute:**
-1. Copy `EyeBreakEnforcer.exe` from the publish folder
+1. Copy `EyeProtector.exe` from the publish folder
 2. Share via email, USB drive, cloud storage, etc.
 3. Recipients just double-click to run
 4. That's it!
@@ -42,7 +42,7 @@
 ✅ **How to distribute:**
 1. Zip the entire `bin/Release/net9.0-windows/` folder
 2. Share the zip file
-3. Recipients extract and run `EyeBreakEnforcer.exe`
+3. Recipients extract and run `EyeProtector.exe`
 4. If it doesn't work, they need to install .NET 9 Desktop Runtime
 
 ---
@@ -54,7 +54,7 @@
 # Build standalone version
 dotnet publish -c Release
 
-# The result is in: bin/Release/net9.0-windows/win-x64/publish/EyeBreakEnforcer.exe
+# The result is in: bin/Release/net9.0-windows/win-x64/publish/EyeProtector.exe
 # Just share this single file!
 ```
 
@@ -72,11 +72,11 @@ dotnet build -c Release
 
 ### For Standalone Version
 **Tell recipients:**
-> "Just download EyeBreakEnforcer.exe and double-click it. No installation needed!"
+> "Just download EyeProtector.exe and double-click it. No installation needed!"
 
 ### For Framework-Dependent Version
 **Tell recipients:**
-> "Download and extract the zip file, then run EyeBreakEnforcer.exe. If you get an error, install .NET 9 Desktop Runtime from Microsoft first."
+> "Download and extract the zip file, then run EyeProtector.exe. If you get an error, install .NET 9 Desktop Runtime from Microsoft first."
 
 ---
 

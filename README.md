@@ -1,11 +1,12 @@
-# EyeBreakEnforcer
+# EyeProtector
 
-A Windows application that enforces the **20-20-20 rule** for eye health: every 20 minutes, look at something 20 feet away for at least 20 seconds.
+A Windows application that enforces the **20-20-20 rule** for eye health and gently reminds you to blink. Every few minutes the screen briefly turns the selected color (about 500 ms by default) to prompt a blink, and every 20 minutes it overlays the screen for 20 seconds so you can rest your eyes.
 
 ## Features
 
 ### Core Functionality
 - **Blink Reminders**: Quick screen flashes every few minutes to remind you to blink
+- **How it works**: The screen briefly goes dark (around 500 ms) to prompt a blink
 - **Break Enforcement**: Full-screen overlays that force you to take 20-second breaks
 - **Customizable Intervals**: Configure timing for both blink and break reminders
 - **Multi-Monitor Support**: Covers all monitors when active
@@ -33,7 +34,7 @@ A Windows application that enforces the **20-20-20 rule** for eye health: every 
 1. **Clone the repository**:
    ```bash
    git clone <repository-url>
-   cd EyeBreakEnforcer
+   cd EyeProtector
    ```
 
 2. **Build the application**:
@@ -59,7 +60,7 @@ The executable will be in `bin/Release/net9.0-windows/win-x64/publish/`
 ## Usage
 
 ### First Run
-1. Launch `EyeBreakEnforcer.exe`
+1. Launch `EyeProtector.exe`
 2. The application will start in the system tray (look for the eye icon)
 3. Right-click the tray icon to access settings
 
@@ -116,7 +117,7 @@ The application starts with these recommended defaults:
 - **Multi-Monitor**: Automatic screen detection and coverage
 
 ### File Locations
-- **Settings**: `%APPDATA%\EyeBreakEnforcer\settings.json`
+- **Settings**: `%APPDATA%\EyeProtector\settings.json`
 - **Application**: Wherever you place the executable
 
 ### Performance
@@ -128,7 +129,7 @@ The application starts with these recommended defaults:
 
 ### Project Structure
 ```
-EyeBreakEnforcer/
+EyeProtector/
 ├── Models/
 │   └── AppSettings.cs          # Configuration data model
 ├── Services/
@@ -142,7 +143,7 @@ EyeBreakEnforcer/
 │   └── SettingsWindow.xaml.cs  # Settings functionality
 ├── App.xaml                    # Application definition
 ├── App.xaml.cs                 # Main application logic
-└── EyeBreakEnforcer.csproj     # Project file
+└── EyeProtector.csproj     # Project file
 ```
 
 ### Key Components

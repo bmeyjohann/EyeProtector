@@ -1,7 +1,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace EyeBreakEnforcer.Services
+namespace EyeProtector.Services
 {
     public class TrayIconManager : IDisposable
     {
@@ -49,7 +49,7 @@ namespace EyeBreakEnforcer.Services
             {
                 Icon = CreateIcon(),
                 ContextMenuStrip = _contextMenu,
-                Text = "EyeBreakEnforcer - Running",
+                Text = "EyeProtector - Running",
                 Visible = true
             };
 
@@ -96,7 +96,7 @@ namespace EyeBreakEnforcer.Services
             string status;
             if (!isRunning)
             {
-                status = "EyeBreakEnforcer - Stopped";
+                status = "EyeProtector - Stopped";
             }
             else if (_isPaused)
             {
@@ -105,7 +105,7 @@ namespace EyeBreakEnforcer.Services
                 {
                     pauseInfo = $" ({FormatTime(resumeIn.Value)})";
                 }
-                status = $"EyeBreakEnforcer - Paused{pauseInfo}";
+                status = $"EyeProtector - Paused{pauseInfo}";
 
                 var pauseResumeItem = _contextMenu?.Items["PauseResume"] as ToolStripMenuItem;
                 if (pauseResumeItem != null)
@@ -138,7 +138,7 @@ namespace EyeBreakEnforcer.Services
                         nextEvent = $" (Blink: {minutes}m{seconds}s)";
                     }
                 }
-                status = $"EyeBreakEnforcer - Running{nextEvent}";
+                status = $"EyeProtector - Running{nextEvent}";
             }
 
             _notifyIcon.Text = status.Length > 63 ? status.Substring(0, 63) : status;
