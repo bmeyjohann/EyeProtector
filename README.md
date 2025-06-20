@@ -186,6 +186,12 @@ dotnet run --configuration Debug
 
 This provides additional console output for troubleshooting.
 
+## Additional Documentation
+
+- [Setup Guide](docs/SETUP.md)
+- [Distribution Guide](docs/DISTRIBUTION.md)
+- [Product Specs](docs/specs.md)
+
 ## Contributing
 
 1. Fork the repository
